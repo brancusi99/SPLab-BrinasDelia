@@ -1,12 +1,22 @@
 package uvt.ro.info.designpatternslab2025;
 
+import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.ApplicationContext;
+import uvt.info.ro.components.ClientComponent;
+import uvt.info.ro.components.SingletonComponent;
+import uvt.info.ro.components.TransientComponent;
 
-@SpringBootApplication
+
+@SpringBootApplication(scanBasePackages = {
+		"uvt.ro.info.designpatternslab2025", // The default package
+		"uvt.info.ro.components"        // The package Spring was missing
+})
 public class DesignPatternsLab2025Application {
 
 		public static void main(String[] args) {
 			//SpringApplication.run(DesignPatternsLab2025Application.class, args);
+			/*
 			Section cap1 = new Section("Capitolul 1");
 			Paragraph p1 = new Paragraph("Paragraph 1");
 			cap1.add(p1);
@@ -29,7 +39,45 @@ public class DesignPatternsLab2025Application {
 			System.out.println("Printing with Alignment");
 			System.out.println();
 			cap1.print();
+*/
 
+			//
+// Run the main function and inspect the output in console
+// to learn about the lifecycle of objects within the
+// Spring Dependency Injection Context
+//
+// Gets a handle of dependency injection context
+			ApplicationContext context =
+					SpringApplication.run(DesignPatternsLab2025Application.class, args);
+// Gets an instance of TransientComponent from the DI context
+			TransientComponent transientBean =
+					context.getBean(TransientComponent.class);
+			transientBean.operation();
+// Note that every time an instance is required,
+// the DI context creates a new one
+			transientBean = context.getBean(TransientComponent.class);
+			transientBean.operation();
+// Gets an instance of SingletonComponent from the DI context
+// Note that the unique instance was created while
+// application was loaded, before creating
+// the transient instances
+			SingletonComponent singletonBean =
+					context.getBean(SingletonComponent.class);
+			singletonBean.operation();
+// Note that every time an instance is required,
+// the DI returns the same unique one
+			singletonBean = context.getBean(SingletonComponent.class);
+			singletonBean.operation();
+// Gets an instance of another class that
+// requires singleton/transient components
+// Note where this instance was created and what beans
+// were used to initialize it
+			ClientComponent c = context.getBean(ClientComponent.class);
+			c.operation();
+
+			// One can also request an instance from DI context by name
+			c = (ClientComponent)context.getBean("clientComponent");
+			c.operation();
 		}
 
 }
