@@ -1,6 +1,7 @@
 package uvt.ro.info.designpatternslab2025;
 
-public class Paragraph implements Element {
+public class Paragraph implements Element, Cloneable {
+
     private String text;
 
     public Paragraph(String text) {
@@ -26,4 +27,10 @@ public class Paragraph implements Element {
     public Element get(int index) {
         throw new UnsupportedOperationException();
     }
+
+    @Override
+    public Paragraph clone() {
+        return new Paragraph(this.text); // shallow clone
+    }
 }
+

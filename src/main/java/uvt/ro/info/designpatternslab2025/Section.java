@@ -3,9 +3,10 @@ package uvt.ro.info.designpatternslab2025;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Section implements Element {
+public class Section implements Element, Cloneable {
+
     private String title;
-    private List<Element> children = new ArrayList<>();
+    private List<Element> elements = new ArrayList<>();
 
     public Section(String title) {
         this.title = title;
@@ -14,23 +15,33 @@ public class Section implements Element {
     @Override
     public void print() {
         System.out.println("Section: " + title);
-        for (Element e : children) {
+        for (Element e : elements) {
             e.print();
         }
     }
 
     @Override
     public void add(Element element) {
-        children.add(element);
+        elements.add(element.clone());  // ✅ clone when added
     }
 
     @Override
     public void remove(Element element) {
-        children.remove(element);
+        elements.remove(element);
     }
 
     @Override
     public Element get(int index) {
-        return children.get(index);
+        return elements.get(index);
+    }
+
+    @Override
+    public Section clone() {
+        Section copy = new Section(this.title);
+        for (Element e : this.elements) {
+            copy.add(e.clone());        // ✅ deep clone children
+        }
+        return copy;
     }
 }
+

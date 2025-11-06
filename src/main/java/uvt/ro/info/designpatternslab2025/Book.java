@@ -3,7 +3,7 @@ package uvt.ro.info.designpatternslab2025;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Book implements Element {
+public class Book implements Element, Cloneable {
 
     private String title;
     private List<Author> authors = new ArrayList<>();
@@ -17,28 +17,29 @@ public class Book implements Element {
         authors.add(a);
     }
 
-    // ✅ metoda nouă cerută de exercițiu
     public void addContent(Element element) {
-        elements.add(element);
+        elements.add(element.clone());  // ✅ clone content
     }
 
     @Override
     public void print() {
-        System.out.println("Book: " + title);
-        System.out.println("\nAuthors:");
+        System.out.println("\nBook: " + title);
+
+        System.out.println("Authors:");
         for (Author a : authors) {
             a.print();
         }
+
         System.out.println("\nContent:");
         for (Element e : elements) {
             e.print();
         }
     }
 
-    // metodele din Element
+    // Composite methods
     @Override
     public void add(Element element) {
-        elements.add(element);
+        elements.add(element.clone());
     }
 
     @Override
@@ -49,5 +50,20 @@ public class Book implements Element {
     @Override
     public Element get(int index) {
         return elements.get(index);
+    }
+
+    @Override
+    public Book clone() {
+        Book copy = new Book(this.title);
+
+        // authors are not Elements → shallow copy e ok
+        copy.authors.addAll(this.authors);
+
+        // deep clone elements
+        for (Element e : this.elements) {
+            copy.elements.add(e.clone());
+        }
+
+        return copy;
     }
 }

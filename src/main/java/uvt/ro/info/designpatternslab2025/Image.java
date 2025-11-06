@@ -1,15 +1,16 @@
 package uvt.ro.info.designpatternslab2025;
 
-public class Image implements Element {
-    private String url;
+public class Image implements Element, Cloneable {
 
-    public Image(String url) {
-        this.url = url;
+    private String imageName;
+
+    public Image(String imageName) {
+        this.imageName = imageName;
     }
 
     @Override
     public void print() {
-        System.out.println("Image: " + url);
+        System.out.println("Image: " + imageName);
     }
 
     @Override
@@ -26,5 +27,11 @@ public class Image implements Element {
     public Element get(int index) {
         throw new UnsupportedOperationException();
     }
+
+    @Override
+    public Image clone() {
+        return new Image(this.imageName);
+    }
 }
+
 
