@@ -1,10 +1,16 @@
 package uvt.ro.info.designpatternslab2025;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class Book implements Element, Cloneable {
 
+    @Getter
+    @Setter
+    private Long id;
     private String title;
     private List<Author> authors = new ArrayList<>();
     private List<Element> elements = new ArrayList<>();
@@ -18,12 +24,13 @@ public class Book implements Element, Cloneable {
     }
 
     public void addContent(Element element) {
-        elements.add(element.clone());  // ✅ clone content
+        elements.add(element.clone());
     }
 
     @Override
     public void print() {
         System.out.println("\nBook: " + title);
+        System.out.println("ID: " + id);
 
         System.out.println("Authors:");
         for (Author a : authors) {
@@ -36,7 +43,6 @@ public class Book implements Element, Cloneable {
         }
     }
 
-    // Composite methods
     @Override
     public void add(Element element) {
         elements.add(element.clone());
@@ -55,11 +61,10 @@ public class Book implements Element, Cloneable {
     @Override
     public Book clone() {
         Book copy = new Book(this.title);
+        copy.setId(this.id);
 
-        // authors are not Elements → shallow copy e ok
         copy.authors.addAll(this.authors);
 
-        // deep clone elements
         for (Element e : this.elements) {
             copy.elements.add(e.clone());
         }
