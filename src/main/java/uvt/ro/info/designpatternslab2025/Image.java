@@ -1,8 +1,23 @@
 package uvt.ro.info.designpatternslab2025;
 
-public class Image implements Element, Cloneable {
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@Entity
+@NoArgsConstructor
+public class Image extends BookElement implements Cloneable {
 
     private String imageName;
+    @Getter
+    @Setter
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     public Image(String imageName) {
         this.imageName = imageName;
@@ -32,6 +47,7 @@ public class Image implements Element, Cloneable {
     public Image clone() {
         return new Image(this.imageName);
     }
+
 }
 
 

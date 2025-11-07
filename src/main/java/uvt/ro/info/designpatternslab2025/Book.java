@@ -1,18 +1,26 @@
 package uvt.ro.info.designpatternslab2025;
 
+import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class Book implements Element, Cloneable {
 
+@Entity
+@NoArgsConstructor(force=true)
+public class Book implements Element, Cloneable {
     @Getter
     @Setter
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String title;
+    @ManyToMany
     private List<Author> authors = new ArrayList<>();
+    @OneToMany
     private List<Element> elements = new ArrayList<>();
 
     public Book(String title) {

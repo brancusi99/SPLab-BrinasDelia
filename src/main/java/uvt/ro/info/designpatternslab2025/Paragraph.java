@@ -1,9 +1,27 @@
 package uvt.ro.info.designpatternslab2025;
 
-public class Paragraph implements Element, Cloneable {
+import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@Entity
+@NoArgsConstructor
+public class Paragraph extends BookElement implements Cloneable {
 
     private String text;
-    private AlignStrategy alignStrategy = null;
+    @ManyToOne
+    @JoinColumn(name = "align_strategy_id")
+    private AlignDirection alignStrategy = null;
+    @Getter
+    @Setter
+    @Id
+    @GeneratedValue
+    private Long id;
+
+    public AlignDirection getAlignStrategy() {
+        return alignStrategy;
+    }
 
     public Paragraph(String text) {
         this.text = text;
@@ -22,7 +40,7 @@ public class Paragraph implements Element, Cloneable {
         return text;
     }
 
-    public void setAlignStrategy(AlignStrategy strategy) {
+    public void setAlignStrategy(AlignDirection strategy) {
         this.alignStrategy = strategy;
     }
 
@@ -46,5 +64,6 @@ public class Paragraph implements Element, Cloneable {
     public Paragraph clone() {
         return new Paragraph(this.text); // shallow clone
     }
+
 }
 

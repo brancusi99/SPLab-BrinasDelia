@@ -1,12 +1,25 @@
 package uvt.ro.info.designpatternslab2025;
 
+import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 import java.util.ArrayList;
 import java.util.List;
 
-public class Section implements Element, Cloneable {
+@Entity
+@NoArgsConstructor(force=true)
+public class Section extends BookElement implements Cloneable {
 
     private String title;
-    private List<Element> elements = new ArrayList<>();
+    @OneToMany
+    private List<BookElement> elements = new ArrayList<>();
+    @Setter
+    @Getter
+    @Id
+    @GeneratedValue
+    private Long id;
 
     public Section(String title) {
         this.title = title;
@@ -21,8 +34,8 @@ public class Section implements Element, Cloneable {
     }
 
     @Override
-    public void add(Element element) {
-        elements.add(element.clone());  // ✅ clone when added
+    public void add(BookElement element) {
+        elements.add(element.clone());
     }
 
     @Override
@@ -39,9 +52,10 @@ public class Section implements Element, Cloneable {
     public Section clone() {
         Section copy = new Section(this.title);
         for (Element e : this.elements) {
-            copy.add(e.clone());        // ✅ deep clone children
+            copy.add(e.clone());
         }
         return copy;
     }
+
 }
 
