@@ -3,6 +3,9 @@ package uvt.ro.info.designpatternslab2025;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.Bean;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import uvt.info.ro.components.ClientComponent;
 import uvt.info.ro.components.SingletonComponent;
 import uvt.info.ro.components.TransientComponent;
@@ -12,9 +15,21 @@ import uvt.info.ro.components.TransientComponent;
 		"uvt.ro.info.designpatternslab2025", // The default package
 		"uvt.info.ro.components"        // The package Spring was missing
 })
+
 public class DesignPatternsLab2025Application {
 
-		public static void main(String[] args) {
+    @Bean
+    public WebMvcConfigurer corsConfigurer() {
+        return new WebMvcConfigurer() {
+            @Override
+            public void addCorsMappings(CorsRegistry registry) {
+                registry.addMapping("/**");
+            }
+        };
+    }
+
+
+    public static void main(String[] args) {
 			//SpringApplication.run(DesignPatternsLab2025Application.class, args);
 			/*
 			Section cap1 = new Section("Capitolul 1");
